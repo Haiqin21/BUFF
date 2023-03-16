@@ -76,17 +76,17 @@ int main() {
             }
             //再次遍历所有轮廓
             for (int j = 0; j < int(contours.size()); j++) { 
-                if (contour[j] == 1) {//如果某轮廓对应数组的值为1，说明只要一个内嵌轮廓
-                    int num = hierarchy[j][2]; //记录该轮廓的内嵌轮廓
-                    cv::RotatedRect box = cv::minAreaRect(contours[num]); //包含该轮廓所有点
+                if (contour[j] == 1) {  //如果某轮廓对应数组的值为1，说明只有一个内嵌轮廓，即为击打目标
+                    int num = hierarchy[j][2];  //记录该轮廓的内嵌轮廓
+                    cv::RotatedRect box = cv::minAreaRect(contours[num]);  //包含该轮廓所有点
                     cv::Point2f vertex[4];
-                    box.points(vertex);//将左下角，左上角，右上角，右下角存入点集
+                    box.points(vertex);  //将左下角，左上角，右上角，右下角依次存入点集vertex
                     for (int i = 0; i < 4; i++) {
-                        cv::line(video_plot, vertex[i], vertex[(i + 1) % 4], cv::Scalar(255, 0, 0), 4, cv::LINE_AA); //画线
+                        cv::line(video_plot, vertex[i], vertex[(i + 1) % 4], cv::Scalar(255, 0, 0), 4, cv::LINE_AA);  //描绘待击打装甲板
                     }
-                    center = (vertex[0] + vertex[2]) / 2; //返回中心坐标
+                    center = (vertex[0] + vertex[2]) / 2;  //返回待击打装甲板的中心坐标
                     cv::circle(video_plot,center,3,cv::Scalar(0, 255, 0),-1);
-                    cv::putText(video_plot, "target", vertex[0], cv::FONT_HERSHEY_SIMPLEX,1,cv::Scalar(255, 255, 0),2.5);//打印字体
+                    cv::putText(video_plot, "target", vertex[0], cv::FONT_HERSHEY_SIMPLEX,1,cv::Scalar(255, 255, 0),2.5);  //打印字体
                 }
             }
             cv::namedWindow("test2", cv::WINDOW_AUTOSIZE);
@@ -149,9 +149,9 @@ void IdentifyBUFF(cv::Mat video_frame,cv::Mat frame_plot,
             points.push_back(box1.center);//储存最小外接矩形中心点
             cv::Point2d c;  //圆心坐标
             double r = 0;   //半径
-            LeastSquaresCircleFitting(points, c, r);//拟合圆
-            cv::circle(frame_plot, c, r, cv::Scalar(0, 0, 255), 2, 8);//绘制圆
-            cv::circle(frame_plot, c, 5, cv::Scalar(255, 0, 0), -1, 8);//绘制圆心
+            LeastSquaresCircleFitting(points, c, r);  //拟合圆
+            cv::circle(frame_plot, c, r, cv::Scalar(0, 0, 255), 2, 8);  //绘制圆
+            cv::circle(frame_plot, c, 5, cv::Scalar(255, 0, 0), -1, 8);  //绘制圆心
 
         }
     }
