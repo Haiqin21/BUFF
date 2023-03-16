@@ -31,7 +31,7 @@ int LeastSquaresCircleFitting(vector<cv::Point2d> &m_Points, cv::Point2d &Centro
 int main() {
     cv::VideoCapture video(video_path);
     if (!video.isOpened()) {
-        cout << "[WARN] Video open faild" << endl;
+        cout << "[WARN] Video opening failure" << endl;
     }
     cv::Mat video_frame;
 
@@ -61,8 +61,6 @@ int main() {
             // cv::morphologyEx(video_frame, video_frame, cv::MORPH_CLOSE, element2);//闭运算
             // cv::namedWindow("test3", cv::WINDOW_NORMAL);
             // cv::imshow("test3", video_frame);
-
-
 
             vector<vector<cv::Point> >contours;  //轮廓数组
             vector<cv::Vec4i>hierarchy; //一个参数
@@ -97,7 +95,6 @@ int main() {
             cv::imshow("BUFF", video_plot);
             cv::waitKey(1);
         }
-
 
     return 0;
 }
