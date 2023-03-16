@@ -1,4 +1,5 @@
-# BUFF
+# buff_recognition_mini
+
 
 ***
 
@@ -7,7 +8,6 @@
 * 识别原理
 * 依赖环境
 * 后续开发
-* TODO
 
 ***
 
