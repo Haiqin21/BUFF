@@ -1,12 +1,10 @@
-
 /*     ____  ____________    __ ____   __     _   __________________  _  __
  __ / / / / / __/_  __/___/ // / /  / / ___| | / /  _/ __/  _/ __ \/ |/ /
 / // / /_/ /\ \  / / /___/ _  / /__/ /_/___/ |/ // /_\ \_/ // /_/ /    /
 \___/\____/___/ /_/     /_//_/____/____/   |___/___/___/___/\____/_/|_/
 */
 /**
- * @file        Buff detector
- * @details     Windows-10 + Qt Creator-5.14.2 + OpenCV-4.1.1
+ * @file        buff_recognition_mini
  * @author      zhaoqicheng zhaoqicheng2023@163.com
  * @version     1.0
  * @date        2023/3/15
@@ -51,16 +49,6 @@ int main() {
             cv::erode(video_frame,video_frame,struct2);   // 腐蚀 
             cv::namedWindow("test1", cv::WINDOW_NORMAL);
             cv::imshow("test1", video_frame);
-
-            // cv::Mat element1 = cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5, 5));//设置内核1
-            // cv::Mat element2 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(25, 25));//设置内核2
-            // cv::morphologyEx(video_frame, video_frame, cv::MORPH_CLOSE, element1);//开运算
-            // cv::floodFill(video_frame, cv::Point(0, 0), cv::Scalar(0));//漫水
-            // cv::namedWindow("test2", cv::WINDOW_NORMAL);
-            // cv::imshow("test2", video_frame);
-            // cv::morphologyEx(video_frame, video_frame, cv::MORPH_CLOSE, element2);//闭运算
-            // cv::namedWindow("test3", cv::WINDOW_NORMAL);
-            // cv::imshow("test3", video_frame);
 
             vector<vector<cv::Point> >contours;  //创建vetcor向量以保存查找到的全部轮廓
             vector<cv::Vec4i>hierarchy;  //创建vetcor向量保存轮廓结构关系
