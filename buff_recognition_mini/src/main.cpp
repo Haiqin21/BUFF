@@ -17,17 +17,17 @@
 using namespace std;
 //using namespace cv;
 
-/*参数声明--------------------------------------------------------------------------------------------*/
+/*参数声明-------------------------------------------------------------------------------------------------------------------*/
 const string video_path = "F:\\hll-code\\video\\1.mp4";  // 设置视频文件路径
 //cv::Mat element1 = cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5,5));    // 设置内核1
 //cv::Mat element2 = cv::getStructuringElement(cv::MORPH_RECT,cv::Size(25,25));  // 设置内核2
-/*函数声明--------------------------------------------------------------------------------------------*/
+/*函数声明-------------------------------------------------------------------------------------------------------------------*/
 //void ImageReprocessing(cv::Mat video_frame,vector<cv::Mat> channels,cv::Mat element1,cv::Mat element2);  // 图像预处理
 //void IdentifyBUFF(cv::Mat video_frame,cv::Mat frame_plot,
 //                  vector<vector<cv::Point> > contours,vector<cv::Vec4i> hierarchy,
 //                  int area[],vector<cv::Point2d> points) ;  // 识别 BUFF
 int LeastSquaresCircleFitting(vector<cv::Point2d> &m_Points, cv::Point2d &Centroid, double &dRadius);  // 拟合函数
-/*主函数----------------------------------------------------------------------------------------------*/
+/*主函数---------------------------------------------------------------------------------------------------------------------*/
 int main() {
     cv::VideoCapture video(video_path);
     if (!video.isOpened()) {
@@ -40,15 +40,15 @@ int main() {
             video >> video_frame;
             if (video_frame.empty())
                 break;
-            cv::Mat video_plot = video_frame.clone();
+            cv::Mat video_plot = video_frame.clone();  // 可控video_frame用于后续绘图
 
-            vector<cv::Mat> channels;
+            vector<cv::Mat> channels;  // 保存分离后各通道图像
             cv::split(video_frame, channels);  //分离通道
-            cv::threshold(channels.at(2) - channels.at(0), video_frame, 100, 255, cv::THRESH_BINARY);//二值化
-            cv::Mat struct1 = cv::getStructuringElement(cv::MORPH_RECT,cv::Size(9,9));
-            cv::dilate(video_frame,video_frame,struct1);
+            cv::threshold(channels.at(2) - channels.at(0), video_frame, 100, 255, cv::THRESH_BINARY); //二值化
+            cv::Mat struct1 = cv::getStructuringElement(cv::MORPH_RECT,cv::Size(9,9));  
+            cv::dilate(video_frame,video_frame,struct1);  // 膨胀消除黑点使轮廓闭合
             cv::Mat struct2 = cv::getStructuringElement(cv::MORPH_RECT,cv::Size(9,9));
-            cv::erode(video_frame,video_frame,struct2);
+            cv::erode(video_frame,video_frame,struct2);   // 腐蚀 
             cv::namedWindow("test1", cv::WINDOW_NORMAL);
             cv::imshow("test1", video_frame);
 
@@ -62,19 +62,20 @@ int main() {
             // cv::namedWindow("test3", cv::WINDOW_NORMAL);
             // cv::imshow("test3", video_frame);
 
-            vector<vector<cv::Point> >contours;  //轮廓数组
-            vector<cv::Vec4i>hierarchy; //一个参数
+            vector<vector<cv::Point> >contours;  //创建vetcor向量以保存查找到的全部轮廓
+            vector<cv::Vec4i>hierarchy;  //创建vetcor向量保存轮廓结构关系
             cv::findContours(video_frame, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_NONE, cv::Point(0, 0));  //提取所有轮廓并建立网状轮廓结构
-            cv::Point2i center; //用来存放找到的目标的中心坐标
+            cv::Point2i center; //用于存放找到的目标的中心坐标
 
             int contour[20] = {0};
-            for (int i = 0; i < int(contours.size()); i++) {//遍历检测的所有轮廓
-                if (hierarchy[i][3] != -1) {  //有内嵌轮廓，说明是一个父轮廓
-                    ++contour[hierarchy[i][3]]; //对该父轮廓进行记录
+            //遍历检测的所有轮廓
+            for (int i = 0; i < int(contours.size()); i++) {
+                if (hierarchy[i][3] != -1) {  // 判断当前轮廓是否为内嵌轮廓
+                    ++contour[hierarchy[i][3]];  //对该轮廓的父轮廓进行计数
                 }
             }
-
-            for (int j = 0; j < int(contours.size()); j++) {//再次遍历所有轮廓
+            //再次遍历所有轮廓
+            for (int j = 0; j < int(contours.size()); j++) { 
                 if (contour[j] == 1) {//如果某轮廓对应数组的值为1，说明只要一个内嵌轮廓
                     int num = hierarchy[j][2]; //记录该轮廓的内嵌轮廓
                     cv::RotatedRect box = cv::minAreaRect(contours[num]); //包含该轮廓所有点
@@ -99,7 +100,7 @@ int main() {
     return 0;
 }
 
-/*函数定义---------------------------------------------------------------------------------------------*/
+/*函数定义-------------------------------------------------------------------------------------------------------------------*/
 /**
  * @brief 图像预处理
  * @param video_frame 图像
