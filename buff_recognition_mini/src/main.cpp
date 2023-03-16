@@ -33,9 +33,14 @@ int main() {
         cout << "[WARN] Video opening failure" << endl;
     }
     cv::Mat video_frame;
+    double t = 0;
+    char string[10];  // 用于存放帧率的字符串
+    double fps;
 
     while (true)
         {
+            t = (double)cv::getTickCount();
+          
             video >> video_frame;
             if (video_frame.empty())
                 break;
@@ -78,6 +83,12 @@ int main() {
                     cv::putText(video_plot, "target", vertex[0], cv::FONT_HERSHEY_SIMPLEX,1,cv::Scalar(255, 255, 0),2.5);  //打印字体
                 }
             }
+            t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+            fps = 1.0 / t;
+            sprintf(string, "%.2f", fps);      // 帧率保留两位小数
+            std::string fpsString("FPS: ");
+            fpsString += string;  // 在"FPS:"后加入帧率数值字符串
+            cv::putText(video_plot,fpsString,cv::Point(100,50),cv::FONT_HERSHEY_SIMPLEX,1,cv::Scalar(0,255,0),3);
             cv::namedWindow("test2", cv::WINDOW_AUTOSIZE);
             cv::imshow("test2", video_plot);
 
