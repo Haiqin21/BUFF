@@ -160,7 +160,7 @@ void IdentifyBUFF(cv::Mat video_frame,cv::Mat frame_plot,
 }
 
 /**
- * @brief LeastSquaresCircleFitting
+ * @brief 拟合圆函数
  * @param m_Points
  * @param Centroid
  * @param dRadius
